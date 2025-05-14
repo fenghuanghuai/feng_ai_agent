@@ -1,0 +1,68 @@
+spring:
+  application:
+    name: feng-ai-agent
+  profiles:
+    active: local
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: deepseek-r1:1.5b
+# 注意配置百炼的api-key
+#    dashscope:
+#      api-key: xxx
+#      chat:
+#        options:
+#          model: qwen-plus
+#   配置vectorstore存储方式为pgvector
+#    vectorstore:
+#      pgvector:
+#        index-type: HNSW   #索引类型
+#        dimensions: 1536   #向量维度
+#        distance-type: COSINE_DISTANCE   #相似度检索方式
+#        max-document-batch-size: 10000 # Optional: Maximum number of documents per batch
+#  postgresql连接配置
+#  datasource:
+#    mysql:
+#      driver-class-name: com.mysql.cj.jdbc.Driver
+#      url: jdbc:mysql://localhost:3306/ai_agent?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+#      username: root
+#      password: 123456
+#    postgres:
+#      url: jdbc:postgresql://改为你的公网地址/yu_ai_agent
+#      username: 改为你的用户名
+#      password: 改为你的密码
+
+server:
+   port: 8123
+   servlet:
+     context-path: /api
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.qcdfz.fengaiagent.controller
+# knife4j的增强配置，不需要增强可以不配
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+mybatis-plus:
+  configuration:
+    # MyBatis 配置
+    map-underscore-to-camel-case: false
+    # 仅在开发环境中打印日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    enable-sql-runner: true
+    db-config:
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
+      logic-delete-value: 1 # 逻辑已删除的值
+      logic-not-delete-value: 0 # 逻辑未删除的值
