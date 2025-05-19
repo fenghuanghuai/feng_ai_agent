@@ -78,10 +78,11 @@ mybatis-plus:
       logic-delete-field: isDelete # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除的值
       logic-not-delete-value: 0 # 逻辑未删除的值
-api-key:
-  github: xxx
-  dashscope: xxx
-  volcengine: xxx
-  tencent:
-    secret-id: xxx
-    secret-key: xxx
+#api-key:
+#  github: xxx
+#  dashscope: xxx
+#  volcengine: xxx
+#  tencent:
+#    secret-id: xxx
+#    secret-key: xxx
+#  search-api-key: xxx
