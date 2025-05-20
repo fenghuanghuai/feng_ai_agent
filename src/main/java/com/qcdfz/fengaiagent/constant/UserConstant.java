@@ -1,10 +1,12 @@
 package com.qcdfz.fengaiagent.constant;
 
 /**
- * 用户常量
- *
- *
-
+ * @version v1.0.0
+ * @belongsProject: feng-ai-agent
+ * @belongsPackage: com.qcdfz.fengaiagent.constant
+ * @author: fgh
+ * @description: 用户常量
+ * @createTime: 2025-05-17 21:35
  */
 public interface UserConstant {
 

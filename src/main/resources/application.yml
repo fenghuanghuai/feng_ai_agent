@@ -8,6 +8,18 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: deepseek-r1:1.5b
+  # 邮件配置
+#  mail:
+#    host: smtp.qq.com
+#    port: 587
+#    username: xxx
+#    password: xxx
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
 # 注意配置百炼的api-key
 #    dashscope:
 #      api-key: xxx
