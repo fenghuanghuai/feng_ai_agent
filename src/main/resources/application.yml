@@ -8,18 +8,14 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: deepseek-r1:1.5b
-  # 邮件配置
-#  mail:
-#    host: smtp.qq.com
-#    port: 587
-#    username: xxx
-#    password: xxx
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
+    mcp:
+      client:
+        sse:
+          connections:
+            server1:
+              url: http://localhost:8127
+#        stdio:
+#          servers-configuration: classpath:mcp-servers.json
 # 注意配置百炼的api-key
 #    dashscope:
 #      api-key: xxx
@@ -44,7 +40,18 @@ spring:
 #      url: jdbc:postgresql://改为你的公网地址/yu_ai_agent
 #      username: 改为你的用户名
 #      password: 改为你的密码
-
+# 邮件配置
+#  mail:
+#    host: smtp.qq.com
+#    port: 587
+#    username: xxx
+#    password: xxx
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
 server:
    port: 8123
    servlet:

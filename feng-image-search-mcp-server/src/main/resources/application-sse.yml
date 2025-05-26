@@ -1,0 +1,12 @@
+spring:
+  ai:
+    mcp:
+      server:
+        name: yu-image-search-mcp-server
+        version: 0.0.1
+        type: SYNC
+        # sse
+        stdio: false
+server:
+  tomcat:
+    connection-timeout: 180000  # 配置Tomcat服务器的连接超时时间为180,000毫秒（即3分钟）

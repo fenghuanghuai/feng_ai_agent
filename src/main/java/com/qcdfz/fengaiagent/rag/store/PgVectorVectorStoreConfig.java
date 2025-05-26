@@ -47,10 +47,10 @@ public class PgVectorVectorStoreConfig {
                 .build();
 
         List<Document> documents = loveAppDocumentLoader.loadMarkdowns();
-        List<List<Document>> batches = customBatchingStrategy.batch(documents);
-        for (List<Document> batch : batches) {
-            vectorStore.add(batch);
-        }
+//        List<List<Document>> batches = customBatchingStrategy.batch(documents);
+//        for (List<Document> batch : batches) {
+//            vectorStore.add(batch);
+//        }
         return vectorStore;
     }
 }
