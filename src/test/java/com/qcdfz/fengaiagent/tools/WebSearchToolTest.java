@@ -18,4 +18,10 @@ class WebSearchToolTest {
         String searchWeb = webSearchTool.searchWeb("程序员鱼皮是谁");
         Assertions.assertNotNull(searchWeb);
     }
+    @Test
+    void searchWebV4() {
+        WebSearchTool webSearchTool = new WebSearchTool(searchApiKey);
+        String searchWeb = webSearchTool.searchWebV4("程序员鱼皮是谁");
+        Assertions.assertNotNull(searchWeb);
+    }
 }

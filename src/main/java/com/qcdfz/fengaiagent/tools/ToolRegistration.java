@@ -1,7 +1,9 @@
 package com.qcdfz.fengaiagent.tools;
 
 import jakarta.annotation.Resource;
+import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.ToolCallbacks;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +35,7 @@ public class ToolRegistration {
         ResourceDownloadTool resourceDownloadTool = new ResourceDownloadTool();
         TerminalOperationTool terminalOperationTool = new TerminalOperationTool();
         PDFGenerationTool pdfGenerationTool = new PDFGenerationTool();
+        TerminateTool terminateTool = new TerminateTool();
         TimeTool timeTool = new TimeTool();
         return ToolCallbacks.from(
                 fileOperationTool,
@@ -43,7 +46,8 @@ public class ToolRegistration {
                 pdfGenerationTool,
                 emailTool,
                 timeTool,
-                todoTool
+                todoTool,
+                terminateTool
         );
     }
 }

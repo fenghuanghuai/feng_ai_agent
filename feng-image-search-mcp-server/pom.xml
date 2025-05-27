@@ -42,8 +42,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-mcp-server-webmvc-spring-boot-starter</artifactId>
-			<version>1.0.0-M6</version>
+			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
+			<version>1.0.0-M7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -85,5 +85,11 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<repositories>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/milestone</url>
+		</repository>
+	</repositories>
 </project>

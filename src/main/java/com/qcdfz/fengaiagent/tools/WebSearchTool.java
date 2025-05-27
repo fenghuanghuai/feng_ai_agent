@@ -23,12 +23,57 @@ import java.util.stream.Collectors;
 public class WebSearchTool {
 
     private final String apiKey;
+    private final String apiKeyV4;
     private static final String SEARCH_URL = "https://www.searchapi.io/api/v1/search";
+    private static final String SEARCH_URL_V4 = "https://open.bigmodel.cn/api/paas/v4/web_search";
 
     public WebSearchTool(String apiKey){
         this.apiKey = apiKey;
+        this.apiKeyV4 = apiKey;
     }
-    @Tool(description = "Search for information from Baidu Search Engine")
+    @Tool(description = "Search for information from Zhipu Web Search API V4")
+    public String searchWebV4(@ToolParam(description = "Search query keyword") String query) {
+        // JDos: 构建请求头
+        HashMap<String, String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + apiKeyV4);
+        headers.put("Content-Type", "application/json");
+
+        // JDos: 构建请求体
+        JSONObject requestBody = new JSONObject();
+        requestBody.set("search_query", query);
+        requestBody.set("search_engine", "search_std ");
+
+        try {
+            // JDos: 发送POST请求
+            String response = HttpUtil.createPost(SEARCH_URL_V4)
+                    .addHeaders(headers)
+                    .body(requestBody.toString())
+                    .execute()
+                    .body();
+
+            // JDos: 解析响应，提取search_result前5条
+            JSONObject jsonObject = JSONUtil.parseObj(response);
+            JSONArray resultArray = jsonObject.getJSONArray("search_result");
+            if (resultArray == null || resultArray.isEmpty()) {
+                return "未找到相关结果";
+            }
+            int limit = Math.min(5, resultArray.size());
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < limit; i++) {
+                JSONObject item = resultArray.getJSONObject(i);
+                // JDos: 格式化每条结果
+                sb.append("【").append(item.getStr("title", "无标题")).append("】")
+                  .append(item.getStr("link", "无链接")).append("\n")
+                  .append(item.getStr("content", "无摘要")).append("\n\n");
+            }
+            return sb.toString().trim();
+        } catch (Exception e) {
+            // JDos: 异常处理
+            return "智谱网页搜索异常: " + e.getMessage();
+        }
+    }
+
+    @Deprecated
     public String searchWeb(@ToolParam(description = "Search query keyword") String query){
         HashMap<String, Object> param = new HashMap<>();
         param.put("q",query);
