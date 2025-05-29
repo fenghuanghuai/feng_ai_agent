@@ -8,16 +8,15 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
-import org.springframework.ai.chat.client.advisor.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.Advisor;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.ToolCallbackProvider;
-import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -68,7 +67,6 @@ public class LoveApp {
 
     /**
      * 执行聊天请求
-     * <p>
      * 该方法用于向指定的聊天顾问发送消息，并获取回复该方法首先构建了一个聊天响应对象，
      * 其中包含了与特定聊天会话相关的信息和设置，然后调用聊天API，并处理返回的响应
      *
@@ -91,6 +89,34 @@ public class LoveApp {
         log.info("content: {}", content);
         // 返回聊天顾问的回复文本
         return content;
+    }
+
+    /**
+     * 与聊天机器人进行流式对话的方法(SSE流式传输)
+     * <p>
+     * 该方法用于向指定的聊天机器人发送用户消息，并获取机器人的回复文本
+     * 它通过构建一个聊天响应对象来实现，该对象包含了与聊天机器人交互所需的所有信息
+     *
+     * @param message 用户输入的消息，用于与聊天机器人进行对话
+     * @param chatId  聊天会话的唯一标识符，用于维护聊天上下文
+     * @return 返回聊天机器人回复的文本内容
+     */
+    public Flux<String> doChatWithStream(String message, String chatId) {
+        // 构建聊天响应对象，通过链式调用设置各项参数
+        var promptBuilder = chatClient
+                .prompt() // 开始一个新的聊天提示构建
+                .user(message) // 设置用户输入的消息
+                .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId) // 设置聊天会话ID参数
+                        .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10)); // 设置聊天记忆检索大小参数
+
+        // 只有当loveAppRagCloudAdvisor不为null时才添加到advisors中
+        if (loveAppRagCloudAdvisor != null) {
+            promptBuilder.advisors(loveAppRagCloudAdvisor);
+        }
+
+        return promptBuilder
+                .stream() // 调用聊天API并发送构建好的 聊天提示
+                .content();// 获取聊天响应对象
     }
 
     record LoveReport(String title, List<String> suggestions) {
@@ -123,33 +149,38 @@ public class LoveApp {
         // 返回恋爱报告实体
         return entity;
     }
-
-    @Resource
-    private VectorStore loveAppVectorStore;
-    @Resource
+//
+//    @Resource
+//    private VectorStore loveAppVectorStore;
+    @Autowired(required = false)
     private Advisor loveAppRagCloudAdvisor;
-    @Resource
-    private VectorStore loveAppCandidateVectorStore;
-    @Resource
-    private VectorStore pgVectorVectorStore;
+//    @Resource
+//    private VectorStore loveAppCandidateVectorStore;
+//    @Resource
+//    private VectorStore pgVectorVectorStore;
     @Resource
     private QueryRewriter queryRewriter;
 
     public String doChatWithRag(String message, String chatId) {
         String rewrite = queryRewriter.doQueryRewrite(message);
-        ChatResponse chatResponse = chatClient.prompt()
+        var promptBuilder = chatClient.prompt()
                 .advisors(spec -> spec.param(CHAT_MEMORY_CONVERSATION_ID_KEY, chatId)
                         .param(CHAT_MEMORY_RETRIEVE_SIZE_KEY, 10))
                 .advisors(new MyLoggerAdvisor())
-                .user(rewrite)
-                // 应用增强检索服务（云知识库服务）
-//                .advisors(loveAppRagCloudAdvisor)
+                .user(rewrite);
+
+        // 只有当loveAppRagCloudAdvisor不为null时才添加到advisors中
+        if (loveAppRagCloudAdvisor != null) {
+            promptBuilder.advisors(loveAppRagCloudAdvisor);
+        }
+
+        ChatResponse chatResponse = promptBuilder
                 // 应用增强检索服务（本地知识库服务）
 //                .advisors(new QuestionAnswerAdvisor(loveAppVectorStore))
                 // 对象匹配顾问
 //                .advisors(new QuestionAnswerAdvisor(loveAppCandidateVectorStore))
                 // pgsql向量数据库查询增强顾问
-                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+//                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
                 // 自定义 检索过滤 增强顾问
 //                .advisors(
 //                        LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor(
@@ -188,6 +219,7 @@ public class LoveApp {
 
     @Resource
     private ToolCallbackProvider toolCallbackProvider;
+
     public String doChatWithMcp(String message, String chatId) {
         ChatResponse response = chatClient
                 .prompt()

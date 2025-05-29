@@ -18,7 +18,7 @@ import javax.sql.DataSource;
  * @description: 多数据源配置类
  * @createTime: 2025-05-10 12:14
  */
-@Configuration
+//@Configuration
 public class DataSourceConfig {
     /** 绑定并创建 MySQL 数据源 */
     @Bean

@@ -1,5 +1,6 @@
 ###Custom###
 application-local.yml
+application-pro.yml
 .cursor
 .cursor/rules
 tmp

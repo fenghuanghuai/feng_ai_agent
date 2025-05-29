@@ -25,7 +25,7 @@ import static org.springframework.ai.vectorstore.pgvector.PgVectorStore.PgIndexT
  * @description: PgVector配置加载类
  * @createTime: 2025-05-10 08:56
  */
-@Configuration
+//@Configuration
 public class PgVectorVectorStoreConfig {
 
     @Resource

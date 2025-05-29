@@ -2,18 +2,18 @@ spring:
   application:
     name: feng-ai-agent
   profiles:
-    active: local
+    active: pro
   ai:
     ollama:
       base-url: http://localhost:11434
       chat:
         model: deepseek-r1:1.5b
-    mcp:
-      client:
-        sse:
-          connections:
-            server1:
-              url: http://localhost:8127
+#    mcp:
+#      client:
+#        sse:
+#          connections:
+#            server1:
+#              url: http://localhost:8127
 #        stdio:
 #          servers-configuration: classpath:mcp-servers.json
 # 注意配置百炼的api-key

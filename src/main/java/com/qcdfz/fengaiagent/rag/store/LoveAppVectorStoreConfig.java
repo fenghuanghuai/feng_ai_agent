@@ -22,7 +22,7 @@ import java.util.List;
  * @description: 初始化向量数据库
  * @createTime: 2025-05-04 21:04
  */
-@Configuration
+//@Configuration
 @Slf4j
 public class LoveAppVectorStoreConfig {
     @Resource
