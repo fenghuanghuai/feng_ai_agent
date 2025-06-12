@@ -1,4 +1,4 @@
-# 🤖 风AI代理 (Feng AI Agent)
+# 🤖 疯AI Agent (Feng AI Agent)
 
 > 一个功能丰富的智能AI代理系统，集成多种AI服务和工具，提供强大的对话、RAG检索、工具调用等能力
 
